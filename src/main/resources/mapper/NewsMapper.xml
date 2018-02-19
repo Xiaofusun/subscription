@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cr.model.mapper.NewsMapper">
+    <resultMap id="ListNews" type="cr.model.News">
+        <id property="newsid" column="NEWSID"/>
+        <result property="newsdate" column="NEWSDATE"/>
+        <result property="newssummary" column="NEWSSUMMARY"/>
+        <result property="newstitle" column="NEWSTITLE"/>
+        <result property="newstype" column="NEWSTYPE"/>
+        <association property="bodyByBid" javaType="cr.model.Body">
+            <id property="bid" column="BID"/>
+            <result property="body" column="BODY"/>
+            <result property="date" column="DATE"/>
+        </association>
+        <!--<result property="" column=""/>-->
+    </resultMap>
+
+    <select id="listNews" resultMap="ListNews">
+        SELECT n.*,b.* FROM news n,body b
+    </select>
+    <resultMap id="Newss" type="cr.model.News">
+        <id property="newsid" column="NEWSID"/>
+        <result property="newsdate" column="NEWSDATE"/>
+        <result property="newssummary" column="NEWSSUMMARY"/>
+        <result property="newstitle" column="NEWSTITLE"/>
+        <result property="newstype" column="NEWSTYPE"/>
+    </resultMap>
+    <select id="queryByType" resultMap="Newss" parameterType="String">
+        SELECT n.* FROM news n WHERE n.newstype=#{type} ORDER BY n.newsid DESC
+    </select>
+</mapper>

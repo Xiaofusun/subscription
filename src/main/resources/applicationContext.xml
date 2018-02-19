@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+<!--测试spring-->
+    <bean id="date" class="java.util.Date"/>
+    <!--开启扫描-->
+    <context:component-scan base-package="cr.*"/>
+    <!-- 基于xml文件的properties配置 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>classpath:database.properties</value>
+            </array>
+        </property>
+    </bean>
+    <!-- 基于注解的properties文件配置  -->
+    <!--<bean id="prop" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <array>
+                <value>classpath:</value>
+            </array>
+        </property>
+    </bean>-->
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <mvc:annotation-driven/>
+<!--添加dataSource-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    <property name="driverClass" value="${driver}"/>
+        <property name="jdbcUrl" value="${url}"/>
+        <property name="user" value="${user}"/>
+        <property name="password" value="${password}"/>
+        <property name="initialPoolSize" value="5" />
+        <!-- 允许最小连接数量为5个 -->
+        <property name="minPoolSize" value="5" />
+        <!-- 允许最大连接数量为20个 -->
+        <property name="maxPoolSize" value="20" />
+        <!-- 允许连接池最大生成100个PreparedStatement对象 -->
+        <property name="maxStatements" value="100" />
+        <!-- 连接有效时间，连接超过3600秒未使用，则该连接丢弃 -->
+        <property name="maxIdleTime" value="3600" />
+        <!-- 连接用完时，一次产生的新连接步进值为2 -->
+        <property name="acquireIncrement" value="2" />
+        <!-- 获取连接失败后再尝试10次，再失败则返回DAOException异常 -->
+        <property name="acquireRetryAttempts" value="10" />
+        <!-- 获取下一次连接时最短间隔600毫秒，有助于提高性能 -->
+        <property name="acquireRetryDelay" value="600" />
+        <!-- 检查连接的有效性，此处小弟不是很懂什么意思 -->
+        <property name="testConnectionOnCheckin" value="true" />
+        <!-- 每个1200秒检查连接对象状态 -->
+        <property name="idleConnectionTestPeriod" value="1200" />
+        <!-- 获取新连接的超时时间为10000毫秒 -->
+        <property name="checkoutTimeout" value="10000" />
+        <!-- sql 心跳 -->
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+    <property name= "testWhileIdle" value="true"/>
+        <property name= "testOnBorrow" value="false"/>
+        <property name= "testOnReturn" value="false"/>
+        <property name= "validationQuery" value="select 1"/>
+        <property name= "timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name= "numTestsPerEvictionRun" value="${maxActive}"/>-->
+    </bean>
+    <!--添加sqlSessionfactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="mapperLocations" value="classpath*:mapper/*.xml"/>
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!--page分页-->
+    <bean id="page" class="cr.model.Page"/>
+
+    <!--开启事务管理-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 多部分文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="104857600" />
+        <property name="maxInMemorySize" value="4096" />
+        <property name="defaultEncoding" value="UTF-8">
+
+        </property>
+    </bean>
+
+    <aop:config>
+        <aop:advisor id="managerTx" advice-ref="txAdvice"
+                     pointcut="execution(cr.model.mapper* *(..))" order="1"/>
+    </aop:config>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="load*" read-only="true" />
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="create*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="crud*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="schedule*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="do*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="*" />
+        </tx:attributes>
+    </tx:advice>
+</beans>
