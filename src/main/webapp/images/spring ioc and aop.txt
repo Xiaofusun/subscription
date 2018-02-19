@@ -1,0 +1,88 @@
+spring ioc:反转控制或叫控制反转
+di(dependency injection):依赖注入
+di的实现方式：
+(1)构造器注入
+(2)setter注入
+(3)注解
+    component:加入该注解的类表示此类被IOC容器所管理 例如：@Component("chinese")
+    autoWired:相当于setter方法
+	controller：相当于加到web层的Action上
+	service:加到service层的实现类上
+	repository:加到dao层的实现类
+
+spring aop(aspect-oriented programming):面向方面编程主要关注的是“横向切入点”，
+从代码的角度上说主要是切入到方法的时机。面向方面编程是面向对象编程的一种有
+效补充：面向对象编程的关注点是一种纵向关系(继承)。面向方面编程的关注点是一
+种横向关系，在开发中一般都是与业务逻辑无关的代码作为一个“方面”，
+比如：日志、事务
+
+Aspect(方面)：advice + poin cut
+
+Join point(连接点)：方面和方法之间的一个桥梁。连接点从编程的角度上看没有
+具体的代码
+
+Advice(通知)：是方面中的具体的执行代码
+
+Point cut(切入点):是advice的执行规则
+
+Target object(目标对象):即被通知的对象，如果没有AOP,那么它的逻辑将要交叉别的事务逻辑，有了AOP之后它可以只关注自己要做的事（AOP让他做爱做的事）
+
+引入(Introduction)
+引入允许我们向现有的类添加新的方法和属性(Spring提供了一个方法注入的功能）
+
+代理(proxy)
+应用通知的对象，详细内容参见设计模式里面的代理模式
+
+织入(Weaving)
+把切面应用到目标对象来创建新的代理对象的过程，织入一般发生在如下几个时机:
+(1)编译时：当一个类文件被编译时进行织入，这需要特殊的编译器才可以做的到，
+例如AspectJ的织入编译器
+(2)类加载时：使用特殊的ClassLoader在目标类被加载到程序之前增强类的字节代码
+(3)运行时：切面在运行的某个时刻被织入,SpringAOP就是以这种方式织入切面的，
+原理应该是使用了JDK的动态代理技术
+
+aop的实现机制：
+1.jdk动态代理(只能代理接口)
+2.cglib代理(既可以代理接口，又可以代理类)
+3.注解 @Aspect @Point
+4.aspectJ
+
+通知类型：
+1.前置通知
+2.后置返回通知
+3.后置最终通知
+4.异常通知
+5.环绕通知
+
+
+
+advice:
+ant-style patterns
+execution(* com.xyz.myapp.service.*.*( ..)):匹配包com.xyz.myapp.service里的所有类或接口中的所有方法
+execution(* com.xyz.myapp.service..*.*(..)):匹配包com.xyz.myapp.service及其子包里的所有类或接口中的所有方法
+execution(* com.xyz.myapp.service..*.*User(..)):匹配包com.xyz.myapp.service及其子包里的所有类或接口中的所有以User结尾的方法
+execution(* com.xyz.myapp.service..*.*User(String, ..)):匹配包com.xyz.myapp.service及其子包里的所有类或接口中的所有以User结尾并且方法中的第一个参数是字符串的方法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

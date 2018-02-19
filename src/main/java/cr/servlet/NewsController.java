@@ -29,7 +29,7 @@ import java.util.List;
 @RequestMapping("/newsController.do")
 public class NewsController {
 
-    String Filepath="F:\\subscription\\src\\main\\webapp\\images\\";
+    String Filepath = "F:\\subscription\\src\\main\\webapp\\images\\";
 
     @Resource
     private NewService newService;
@@ -44,17 +44,50 @@ public class NewsController {
         return "queryByType";
     }
 
-    @RequestMapping( method= RequestMethod.POST)
-    public String addNews(@RequestParam("file") CommonsMultipartFile file) throws IOException {
-       System.out.println("fileName："+file.getOriginalFilename());
-
-        File newFile=new File(Filepath+file.getOriginalFilename());
+    @RequestMapping(method = RequestMethod.POST)
+    public String addNews(@RequestParam("file") CommonsMultipartFile[] file) throws IOException {
+        Boolean b;
         //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
-        file.transferTo(newFile);
-          //控制台输出
-          System.out.println("进入测试");
-            return "test";
+        for (int i = 0; i < file.length; i++) {
+            file[i].transferTo(new File(Filepath + file[i].getOriginalFilename()));
+
         }
+        if (!file.equals(null)) {
+            //删除上传原文件
+            file.clone();
+        }
+        //控制台输出
+        System.out.println(file);
+        return "test";
+    }
+
+        /*
+        * 第二种上传
+        * */
+       /* @RequestMapping( method= RequestMethod.POST)
+        public String  addNews(HttpServletRequest request) throws IllegalStateException, IOException
+        {
+            //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
+            CommonsMultipartResolver multipartResolver=new CommonsMultipartResolver(
+                    request.getSession().getServletContext());
+            //检查form中是否有enctype="multipart/form-data"
+            if(multipartResolver.isMultipart(request)) {
+                //将request变成多部分request
+                MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+                //获取multiRequest 中所有的文件名
+                Iterator iter = multiRequest.getFileNames();
+                while (iter.hasNext()) {
+                    //一次遍历所有文件
+                    MultipartFile file = multiRequest.getFile(iter.next().toString());
+                    if (file != null) {
+                        String path = Filepath + file.getOriginalFilename();
+                        //上传
+                        file.transferTo(new File(path));
+                    }
+                }
+            }
+            return "test";
+        }*/
 
     public NewService getNewService() {
         return newService;

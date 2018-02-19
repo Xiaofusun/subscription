@@ -1,0 +1,184 @@
+jsp页面有六部分组成：
+1.html静态内容
+2.jsp的指令：page taglib include
+3.jsp注释:(1)客户端注释：查看页面源代码可以看到该注释内容 (2)服务器端注释：查看页面源代码不可以看到该注释内容
+4.jsp的动作：
+5.scriplet脚本
+6.jsp标准标签库
+
+jsp的执行过程：
+1.客户端(浏览器)向服务器端(tomcat)发送请求
+2.服务器(由HttpServletRequest)接收到客户端的请求
+3.把jsp转译成serlvet(.java文件)
+4.编译该servlet文件，产生字节码(bytecode)文件
+5.处理编译后的字节码文件，然后把处理后的结果响应(HttpServletResponse)给客户端
+
+jsp的内置(隐式)对象：
+page pageContext request response session application out config Exception
+
+jsp的四个范围：
+1.page(当前页面)范围：只有在当前的jsp页面上才可以获取其数据，非当前jsp页面不能够获取该数据
+2.request(请求)范围：浏览器的地址栏不发生变化均可以获取数据
+3.session(会话)范围：无论浏览器的地址栏是否发生变化，在第一次显示数据的页面不被关闭的情况下，
+                     不管打开多少次浏览器均可以获取数据
+4.application(应用)范围：只要再不关闭服务器的前提下，不管你的浏览器如何变化，均可以获取其数据
+
+jsp简介
+jsp两个包含的区别：如果包含的都是静态内容，两种包含没有区别。
+1.静态包含(@include)：先包含后处理，产生一个字节码文件
+2.动态包含(<jsp:include></jsp:include)：先分别处理后包含，会产生多个字节码文件
+
+
+jsp两个跳转的区别：
+1.重定向(<c:redirect/>)：也称为客户端跳转，直观上看是浏览器的地址栏发生变化。
+  在传递数据时，数据是以在http协议中作为协议头的内容来传的，最大传递的数据
+  不能超过65536个byte
+2.转发(<jsp:forward/>):也称为服务器端跳转，直观上看是浏览器的地址栏没有发生变化
+  在传递数据时，数据是以在http协议中作为协议体的内容来传的，传递的数据没有大小限制
+  
+---------------------------------------------------------------
+Servlet的生命周期：
+1.加载(loadOnStartup属性)
+2.实例化(构造方法)
+3.初始化(init方法)
+4.调用service方法
+5.销毁(destroy方法)
+
+请你说说service、 doGet和doPost方法
+
+如何保证Servlet线程安全？
+1. 把共享变量(属性)转变为局部变量(方法中定义的变量)
+2. 如果有共享变量，则需要在方法中对其进行同步(同步代码块)
+3. 实现SingleThreadModel接口(Servlet2.3之后不建议使用，也没有给出替代的方式)
+
+
+
+jsoup模仿浏览器访问网页
+Connection contentConnection=Jsoup.connect(contentUrl);
+                    contentConnection.header("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+                    contentConnection.header("Accept-Encoding","gzip, deflate, sdch");
+                    contentConnection.header("Accept-Language","zh-CN,zh;q=0.8");
+                    contentConnection.header("Cache-Control","max-age=0");
+                    contentConnection.header("Connection", "keep-alive");
+                    contentConnection.header("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36");
+                    contentConnection.header("Cookie","uuid_tt_dd=-7287016780307873738_20151221; __gads=ID=5263db03fc7e988d:T=1450688455:S=ALNI_MYzpUy5lBtl8DDYcG5WKXUwNyGhkw; __qca=P0-2004748507-1450688412037; bdshare_firstime=1450745642341; _ga=GA1.2.229904132.1451899124; _JQCMT_browser=a71b15599474cdc7f483018f69812fc4; _JQCMT_ifcookie=1; __utma=17226283.229904132.1451899124.1452216244.1453688451.3; __utmz=17226283.1453688451.3.3.utmcsr=baidu|utmccn=(organic)|utmcmd=organic; lzstat_uv=2437943853573843981|3343685@3609445@3504240@3017872; __message_district_code=110000; UN=shangyishang; UE=\"1044732267@qq.com\"; BT=1459836613232; uuid=743c1f5c-2c92-42e2-842c-6d5e25a6f78c; _message_m=l0s4zgj3ao23m5rdx03wzhwl; avh=51024089%2c51027983%2c8631897; __message_sys_msg_id=0; __message_gu_msg_id=0; __message_cnel_msg_id=0; __message_in_school=0; Hm_lvt_6bcd52f51e9b3dce32bec4a3997715ac=1459841472,1459993742; Hm_lpvt_6bcd52f51e9b3dce32bec4a3997715ac=1459994990; dc_tos=o58rcf; dc_session_id=1459994991250");
+                    contentConnection.header("Host","blog.csdn.net");
+                    contentConnection.header("If-Modified-Since","Thu, 07 Apr 2016 02:10:46 GMT");
+                    contentConnection.header("Upgrade-Insecure-Requests","1");
+                    Document contentDocument= contentConnection.get();
+              
+                    Elements contentElement=contentDocument.select("#article_content");
+                    String content=contentElement.html();
+
+本机ip地址
+service iptables restart  27017
+微信开发者登录
+AppID：wx167427cd8c717555
+AppSecret：3f56ce8e924fc2002b09164d565b67a6
+阿里云服务器
+账号：为支付宝账号密码
+ip：47.94.233.187(公)
+    172.17.37.180(私有)
+云服务器的账号：root
+密码[lina1995]
+
+电脑密钥指纹（MD5验证）
+ssh-rsa 2048 27:e3:4b:fb:72:de:fd:e0:d0:92:62:58:c9:15:05:eb
+微信测试号管理
+appID：wxbb80180663472a0c
+appsecret：5d970c3cb32bbfb59f6e6a526e901e77
+access_token:MSJGVA62gEt24TAEJQZlGlE8jR-SRK2igV85DvUhanWsin0vlAxMiapOHZteCcRDCPniT0rXScuvLWqCIts8loqJj8MhAv8J02vk3x4HWCu121lqf2pb0Kma2hAp95h9KMFgAJAYAT
+使用fastWeiXin流程
+1.继承WinxincontrollerSupport
+2.注入apiConfig
+3.重写抽象方法 getToken getAppId getAESKey
+getAESKey为安全系数：文明模式为null；
+4.
+
+
+阿里云Mysql
+数据库名称：companys
+账号：sunzhanfu
+密码：3141596253
+
+静态网页制作——》JQuery——》mysql——》java web
+hibernate，mybites是数据持久层
+
+git    github    maven     putty      eclipse    jetty等
+
+
+做前端 素材网站：www.sj63.com
+软件：Flex
+idea   git   tomcat  maven  jekens   框架ssm
+nginx    
+redis 
+sql语句 
+如果是多对一：则通过子表中的外键，查找对应的主表的主键。
+如果是一对多：则通过主表中的主键，查找子表中对应的外键。
+
+
+
+  省份：<select name="ctl00$ContentPlaceHolder1$ddlProvince" id="ctl00_ContentPlaceHolder1_ddlProvince" class="mySelect">
+	<option selected="selected" value="11">北京市</option>
+	<option value="12">天津市</option>
+	<option value="13">河北省</option>
+	<option value="14">山西省</option>
+	<option value="15">内蒙古自治区</option>
+	<option value="21">辽宁省</option>
+	<option value="22">吉林省</option>
+	<option value="23">黑龙江省</option>
+	<option value="31">上海市</option>
+	<option value="32">江苏省</option>
+	<option value="33">浙江省</option>
+	<option value="34">安徽省</option>
+	<option value="35">福建省</option>
+	<option value="36">江西省</option>
+	<option value="37">山东省</option>
+	<option value="41">河南省</option>
+	<option value="42">湖北省</option>
+	<option value="43">湖南省</option>
+	<option value="44">广东省</option>
+	<option value="45">广西壮族自治区</option>
+	<option value="46">海南省</option>
+	<option value="50">重庆市</option>
+	<option value="51">四川省</option>
+	<option value="52">贵州省</option>
+	<option value="53">云南省</option>
+	<option value="54">西藏自治区</option>
+	<option value="61">陕西省</option>
+	<option value="62">甘肃省</option>
+	<option value="63">青海省</option>
+	<option value="64">宁夏回族自治区</option>
+	<option value="65">新疆维吾尔自治区</option>
+护士姓名：
+        <input name="ctl00$ContentPlaceHolder1$txtName" type="text" value="孙占富" id="ctl00_ContentPlaceHolder1_txtName" class="myTxt" />
+        所在医疗机构：<input name="ctl00$ContentPlaceHolder1$txtZyUnit" type="text" value="长峰医院" id="ctl00_ContentPlaceHolder1_txtZyUnit" class="myTxt" />
+        验证码：
+        <input name="ctl00$ContentPlaceHolder1$checkcode" type="text" id="ctl00_ContentPlaceHolder1_checkcode" class="myTxt" style="width: 80px" />
+        <img id="imgVilidate" alt="更换验证码" src="pn.aspx" style="cursor: pointer; vertical-align: bottom"
+            border="0" onclick="ChangeCheckCode()" height="30" width="100px" />
+        <a href="#" onclick="ChangeCheckCode()">换一张</a>
+    </div>
+
+<div class="myNotice">
+        <ul>
+            <li>所有查询条件为必填项。</li>
+            <li>姓名至少输入2个字。</li>
+            <li>所在医疗机构至少输入4个字。</li>
+        </ul>
+    </div>
+
+<div style="text-align: center;">
+        <input type="submit" name="ctl00$ContentPlaceHolder1$ButtonSearch" value="查询" onclick="return CheckSearchCondition();" id="ctl00_ContentPlaceHolder1_ButtonSearch" class="myButton" />
+    </div>
+
+
+action="nursesearch.aspx";
+
+
+
+
+springMVC的处理机制
+用户请求传到dispiclsservlet，dispiclsservlet根基传来的参数匹配headerMapping，找到对应的headler进行逻辑处理，返回modellandvi，modelandv.传给disperseservlet，disperseservlet进行视图渲染返还给请求页面。
+hibernate的处理机制
+配置ConfigScuoes.biudConfig，查找hibernate。fig。xml配置文件，hibernate。fig。xml根据mapping标签关联各类关系。通过sessionFactory。onpeanSessoion

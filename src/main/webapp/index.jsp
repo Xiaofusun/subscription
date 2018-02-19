@@ -21,8 +21,8 @@
     <%--/newsController.do--%>
 </form>
 <a href="/test.do" name="method" >测试</a>
-<form action="newsController.do"  method="post" enctype="multipart/form-data">
-    <input type="file"  name="file" >
+<form action="newsController.do"  method="post"  enctype="multipart/form-data">
+    <input type="file"  name="file" multiple="multiple" ><%--multiple为多文件添加--%>
     <input type="submit" value="提交">
     <%--/newsController.do--%>
 </form>
